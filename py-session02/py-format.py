@@ -28,8 +28,7 @@ print('Decimal: {0:d} Hexadecimal: {0:X} Octal: {0:o}'.format(255))
 print('Porcentaje: {p1}, {p2} = {p3:%}'.format(p1 = 1, p2 = 2, p3= 1/2))
 
 rpath1 = r'C:\Windows\system32\cmd.exe'
-rpath2 = r'C:\Windows\'
-
+print(rpath1)
 
 v1 = input("Enter a value: ")
 i1 = int(input("Enter a number: "))
