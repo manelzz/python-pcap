@@ -38,7 +38,14 @@ def main():
     print(f"DEGREES_FARENHEIT = {strutils.DEGREES_FAHRENHEIT}")
     print(f"PRIME = {strutils.PRIME}")
     print("*" * 100)
+    print(f"Current year: {planning.current_year()}")
+    print(f"Remaining days: {planning.remaining_days()}")
+    print(f"Elapsed days: {planning.elapsed_days()}")
 
+    for year_test in range(1979, planning.current_year()):
+        print(f"Is year {year_test} a leap year? {planning.is_leap_year(year_test)}")
+
+    print(f"Progress: {planning.year_progress()}")
 
 if __name__ == "__main__":
     main()
