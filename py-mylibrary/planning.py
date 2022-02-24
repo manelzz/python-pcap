@@ -4,7 +4,7 @@ Planning Utilities and Entities
 import datetime as dt
 
 JANUARY = 1
-FEBRERY = 2
+FEBRUARY = 2
 MARCH = 3
 APRIL = 4
 MAY = 5
@@ -54,20 +54,26 @@ def is_leap_year(year: int = current_year()) -> bool:
         is_leap_year = False
     return is_leap_year
 
-def prev_leap_year(year: int = current_year()) -> bool:
-    pass
+def prev_leap_year(year: int = current_year()) -> int:
+    '''Given a year shows the previous leap year. The default year is the actual one'''
+    for prev_year in range(year-1, year-100, -1):
+        if is_leap_year(prev_year):
+            return prev_year
        
 def next_leap_year(year: int = current_year()) -> bool:
-    pass
+    '''Given a year shows the previous leap year. The default year is the actual one'''
+    for next_year in range(year+1, year+100, +1):
+        if is_leap_year(next_year):
+            return next_year
 
 def total_days(year: int = current_year()) -> int:
     '''Return days of a year'''
     return 365 if not is_leap_year(year) else 366
 
-def year_progress(pretty:bool = True) -> float|str:
+def year_progress(pretty:bool = True, year: int = current_year()) -> float|str:
     '''Return % of the year'''
     progress = elapsed_days() / total_days()
-    return f"{progress}:.2%" if pretty else progress * 100
+    return f"{progress:.2%}" if pretty else progress * 100
     #raise NotImplementedError("Not yet implemented!!!")
 
 #DATA TYPES (CLASS)
