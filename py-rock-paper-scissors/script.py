@@ -42,7 +42,7 @@ while not end_game:
     round_wins = 0
     round_drafts = 0
     round_losses = 0
-
+ 
     while not end_round:
         pass # sacar mano
         pass # mostrar estadisticas
