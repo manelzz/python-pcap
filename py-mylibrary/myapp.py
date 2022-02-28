@@ -58,6 +58,20 @@ def main():
     # for year_test in range(2010, planning.current_year()):
     #     print(f"The next leap year of year {year_test} is {planning.next_leap_year(year_test)}.")
 
+    print(strutils.truncate("Hola que tal estas, a ver si truncas", max_length=40))
+    print(strutils.truncate("Hola que tal estas, a ver si truncas", max_length=20))
+    print(strutils.truncate("Hola que tal estas, a ver si truncas", max_length=20, placeholder = "[...]"))
+
+    for i in range(10):
+        print(f"Code: {strutils.randcode()}")
+        print(f"Code: {strutils.randcode(length = 12)}")
+        print(f"Code: {strutils.randcode(length = 12, uppercase_letters=True, lowercase_letters=True, digits=False)}")
+        print("*"*100)
+        my_codes = strutils.randcodes(num_codes=100, length=12)
+        print(f"Code: {len(my_codes)}")
+        print(my_codes)
+
+
 if __name__ == "__main__":
     main()
     

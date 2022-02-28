@@ -4,6 +4,8 @@ DocString: Rock-Paper-Scissors
  
 import random
 
+from numpy import round_
+
 # Variables
 player_name = None
 MAX_ROUNDS = 5
@@ -44,16 +46,35 @@ while not end_game:
     round_losses = 0
  
     while not end_round:
+        
+        round_num = +1
+        
         pass # sacar mano
+        
         pass # mostrar estadisticas
     
+        #Print round report
+        print("Round report!")
+        print("*" *50)
+        print(f"Wins: {round_wins/round_num:.2%}")
+        print("*" *50)
+
+        #Check if a player wins more than games or the limit of round is achieved
+        end_round = False if round_wins < (MAX_ROUNDS-round_wins) True
+        end_round = False if round_num < MAX_ROUNDS True
+        
+
     new_game = input(f"Do you want to play again? (y/n): ")
     if  new_game == "n":
         end_game = True
     elif new_game == "y":
         pass
-    else: 
-        print("")
+
+
+    #Print Game report
+    print("Game report!")
+    print("*" *50)
+    print("*" *50)
 
 print("Thank you!! See you soon!!!!")
 
