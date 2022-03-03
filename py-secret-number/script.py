@@ -24,6 +24,8 @@ def main():
         print(f"Waiting to start ... Seconds: {t} ")
         time.sleep(1)
 
+    start_date = dt.datetime.today()
+    print(F"start date: {start_date}")
     secret_number = random.randint(a=1, b=MAX_VALUE)
     num_attempts = 0
 
@@ -44,10 +46,10 @@ def main():
         elif player_number > secret_number:
             print(f"Sorry {player_name}! Your guess is to high:")
     
-    end_date = dt.datetime.now()
+    end_date = dt.datetime.today()
     duration = end_date - start_date
 
-    print(f"Total duration: {duration.total_seconds():%.2f} seconds")
+    print(f"Total duration: {duration.total_seconds():.2f} seconds")
     print(f"Good job {player_name}! Thanks for playing with us")
 
 #Call the main method
