@@ -20,7 +20,7 @@ def main():
     print(f"Welcome, {player_name}! I'm thinking a number between 1 and {MAX_VALUE}, Can you guess it?")
 
     print(f"Loading game. Please wait ... {len(player_name)} seconds...")
-    for t in range(1,len(player_name)):
+    for t in range(0,len(player_name)):
         print(f"Waiting to start ... Seconds: {t} ")
         time.sleep(1)
 
