@@ -38,6 +38,10 @@ class Employee:
         '''DocString'''
         return f"{self.lastname} {self.firstname}"
 
+    def annual_salary(self) -> float:
+        '''Phyton DocString'''
+        return self.DEFAULT_PAYMENTS * self.DEFAULT_PAYMENTS
+        
     def age(self) -> int:
         '''DocString'''
         interval = date.today() - self.birthdate

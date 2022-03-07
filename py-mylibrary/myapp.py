@@ -4,6 +4,7 @@ Main module
 
 from datetime import date
 import math
+from unicodedata import name
 from pylib.entities import geography
 from pylib.entities import geometry
 from pylib.utils import mathutils
@@ -72,13 +73,13 @@ def main():
         print(f"Code: {strutils.randcode()}")
         print(f"Code: {strutils.randcode(length = 12)}")
         print(f"Code: {strutils.randcode(length = 12, uppercase_letters=True, lowercase_letters=True, digits=False)}")
-        print("*"*100)
+        print("*"*50)
         my_codes = strutils.randcodes(num_codes=100, length=12)
         print(f"Code: {len(my_codes)}")
         print(my_codes)
 
-    print("*" *100)
-    print("*" *100)
+    print("*" *50)
+    print("*" *50)
 
     print(F"Default Salary: {Employee.DEFAULT_SALARY}")
     print(F"Default payments: {Employee.DEFAULT_PAYMENTS}")
@@ -89,7 +90,7 @@ def main():
     e5 = Employee(firstname="Jordi", lastname="Alejandro", birthdate=date(year=1995, month=2, day=1), height= 1.85, weight=60)
     employees =[e1,e2,e3,e4,e5]
     for employee in employees:
-        print(F"-"*100)
+        print(F"-"*50)
         print(F"Code: {employee.code}")
         print(F"Firstname: {employee.firstname}")
         print(F"Lastname: {employee.lastname}")
@@ -100,19 +101,38 @@ def main():
         print(F"Reverse Name: {employee.reverse_name()}")
         print(F"Age: {employee.age()}")
         print(F"BMI: {employee.bmi()}")
-        print(F"-"*100)
+        print(F"-"*50)
     print(F"Counter: {Employee._counter}")
 
 
     print(F"Latitude: ({Location.MIN_LATITUDE:+},{Location.MAX_LATITUDE:+})")
     print(F"Longitude: ({Location.MIN_LONGITUDE:+},{Location.MAX_LONGITUDE:+}))")
-    l1 = Location(latitude=0.0, longitude=0.0)
-    l2 = Location(latitude=0.0, longitude=0.0)
-    l3 = Location(latitude=0.0, longitude=0.0)
-    l4 = Location(latitude=0.0, longitude=0.0)
-    l5 = Location(latitude=0.0, longitude=0.0)
-    locations = [l1,l2,l3,l4,l5]
+    
+    mad = Location(name="Madrid", latitude = 40.4165, longitude=-3.70256)
+    bcn = Location(name="Barcelona", latitude = 41.38879, longitude=2.15899)
+    paris = Location(name="Paris", latitude = 48.85341, longitude=2.3488)
+    ny = Location(name="New York", latitude = 40.71427, longitude=-74.00597)
+    locations = [mad, bcn, paris, ny]
     print(F"Counter: {Location._counter}")
+    for location in locations:
+        print("-" * 50)
+        print(f"Ciutat: {location.name}")
+        print(f"Latitude: {location.latitude_deg(decimals = 3, cpoint=False)}")
+        print(f"Longitud: {location.longitude_deg(decimals = 3, cpoint=False)}")
+        print(f"Coordinades: {location.to_degrees(decimals = 4, cpoint=False)}")
+        print(f"Latitude: {location.latitude_deg(decimals = 3)}")
+        print(f"Longitud: {location.longitude_deg(decimals = 3)}")
+        print(f"Coordinades: {location.to_degrees(decimals = 4)}")
+        print("-" * 50)
+        print(f"Latitude: {location.latitude_dms(decimals = 3, cpoint=False)}")
+        print(f"Longitud: {location.longitude_dms(decimals = 3, cpoint=False)}")
+        print(f"Coordinades: {location.to_dms(decimals = 4, cpoint=False)}")
+        print(f"Latitude: {location.latitude_dms(decimals = 3)}")
+        print(f"Longitud: {location.longitude_dms(decimals = 3)}")
+        print(f"Coordinades: {location.to_dms(decimals = 4)}")
+        print("-" * 50)
+        print(f"Distancia: {location.distance_to(mad)} Km")
+        print(f"Punt intermig: {location.midpoint_to(mad).to_degrees()}")
 
     print(F"RGB Limits: ({Color.MIN_VALUE},{Color.MAX_VALUE})")
     c1 = Color(name="Black", red=0, green=0, blue=0)
