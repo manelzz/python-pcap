@@ -2,7 +2,9 @@
 Staff Module
 '''
 
+from code import interact
 from datetime import date, datetime
+
 from pylib.utils import strutils
 import math
 
@@ -14,9 +16,8 @@ class Employee:
     DEFAULT_PAYMENTS: int  = 12
     _counter: int = 0
 
-
     #INICIALIZADOR DE OBJETO (CONSTRUCTOR)
-    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, month_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS):
+    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, month_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS, hiredate: date = date.today()):
         # ----> []object > Inicializar el estado de este objeto
         #Inicializamos los atributos o campos de instanacia a objeto (self.XXX)
         Employee._counter +=1
@@ -28,6 +29,7 @@ class Employee:
         self.weight = weight
         self.month_salary = month_salary
         self.payments = payments
+        self.hiredate = hiredate
 
     #COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
     def fullname(self) -> str:
@@ -46,6 +48,11 @@ class Employee:
         '''DocString'''
         interval = date.today() - self.birthdate
         return math.floor(interval.days/365)
+
+    def seniority(self)-> int:
+        '''Calcula dies d'antiguitat a l'empresa'''
+        interval = date.today() - self.hiredate
+        return interval
 
     def bmi(self) -> tuple[float,str]:
         '''DocString'''

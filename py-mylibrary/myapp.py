@@ -4,7 +4,6 @@ Main module
 
 from datetime import date
 import math
-from unicodedata import name
 from pylib.entities import geography
 from pylib.entities import geometry
 from pylib.utils import mathutils
@@ -83,12 +82,12 @@ def main():
 
     print(F"Default Salary: {Employee.DEFAULT_SALARY}")
     print(F"Default payments: {Employee.DEFAULT_PAYMENTS}")
-    e1 = Employee(firstname="Jordi", lastname="Ariño", birthdate=date(year=1995, month=2, day=1), height= 1.80, weight=65)
-    e2 = Employee(firstname="Ramón", lastname="Carles", birthdate=date(year=1995, month=2, day=1), height= 1.70, weight=80)
+    e1 = Employee(firstname="Jordi", lastname="Ariño", birthdate=date(year=1995, month=2, day=1), height= 1.80, weight=65, hiredate = date(year = 2022, month= 9, day=1))
+    e2 = Employee(firstname="Ramón", lastname="Carles", birthdate=date(year=1995, month=2, day=1), height= 1.70, weight=80, hiredate = date(year = 2021, month= 2, day=2))
     e3 = Employee(firstname="Elisabet", lastname="Castro", birthdate=date(year=1995, month=2, day=1), height= 1.70, weight=70)
     e4 = Employee(firstname="Enrique", lastname="Ramirez", birthdate=date(year=1995, month=2, day=1), height= 1.75, weight=73)
     e5 = Employee(firstname="Jordi", lastname="Alejandro", birthdate=date(year=1995, month=2, day=1), height= 1.85, weight=60)
-    employees =[e1,e2,e3,e4,e5]
+    employees =(e1,e2,e3,e4,e5)
     for employee in employees:
         print(F"-"*50)
         print(F"Code: {employee.code}")
@@ -112,7 +111,10 @@ def main():
     bcn = Location(name="Barcelona", latitude = 41.38879, longitude=2.15899)
     paris = Location(name="Paris", latitude = 48.85341, longitude=2.3488)
     ny = Location(name="New York", latitude = 40.71427, longitude=-74.00597)
-    locations = [mad, bcn, paris, ny]
+    prnd1 = Location.random()
+
+    locations = (mad, bcn, paris, ny, prnd1)
+    
     print(F"Counter: {Location._counter}")
     for location in locations:
         print("-" * 50)
@@ -140,7 +142,14 @@ def main():
     c3 = Color(name="Black", red=0, green=0, blue=0)
     c4 = Color(name="Black", red=0, green=0, blue=0)
     c5 = Color(name="White", red=255, green=255, blue=255)
-    colors = [c1,c2,c3,c4,c5]
+    c6 = Color.random()
+    c7 = Color.from_hex("#FF00F")
+    colors = [c1,c2,c3,c4,c5,c6,c7]
+    for color in colors:
+        print("-" * 50)
+        print(f"Color: {color.to_hex()}")
+        print(f"Color: {color.to_rgb()}")
+        print("-" * 50)
     print(F"Counter: {Color._counter}")
 
 

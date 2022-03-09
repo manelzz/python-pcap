@@ -3,15 +3,25 @@ Geography Module
 '''
 
 from cmath import cos
+from lib2to3.pgen2.token import MINUS
 import math
-
+import random
 from numpy import mat
 from sqlalchemy import lateral
 from pylib.utils import strutils
+from pylib.utils import mathutils
 
 
 EARTH_RADIUS: int = 6370
 
+def degrees_to_dms(value:float) -> tuple[int,int,float]:
+    degrees = int(value)
+    fminutes = abs(value - degrees) * 60
+    minutes = int(fminutes)
+    seconds = (fminutes - int(fminutes)) * 60
+    
+    return (degrees, minutes, seconds)
+        
 class Location:
 
     #ATRIBUTOS O CAMPOS A NIVEL DE CALSE (STATIC/SHARED)
@@ -29,6 +39,35 @@ class Location:
         self.latitude = latitude
         self.longitude = longitude
 
+    @property
+    def name(self):
+        '''DocString'''
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        '''DocString'''
+        self._name = value
+    
+    @property
+    def latitude(self):
+        '''DocString'''
+        return self._latitude
+
+    @latitude.setter
+    def latitude(self, value: float):
+        '''DocString'''
+        self._latitude = value
+    
+    @property
+    def longitude(self):
+        '''DocString'''
+        return self._longitude
+
+    @longitude.setter
+    def longitude(self, value:float):
+        '''DocString'''
+        self._longitude = value
 
     # Interpolations strings
 
@@ -71,15 +110,12 @@ class Location:
     # ----------------------------------------------------
 
     # Interpolation string + math operations
-
+    
     def latitude_dms(self, decimals: int = 5, cpoint: bool = True) -> str:
         '''
         Python DocString
         '''
-        degrees = int(self.latitude)
-        ms = (self.latitude - int(self.latitude)) * 60
-        minutes = int(ms)
-        seconds = (ms - int(ms)) * 60
+        (degrees, minutes, seconds) = degrees_to_dms(self.latitude)
 
         if cpoint:
             if self.longitude > 0:
@@ -95,10 +131,7 @@ class Location:
         '''
         Python DocString
         '''
-        degrees = int(self.longitude)
-        ms = (self.longitude - int(self.longitude)) * 60
-        minutes = int(ms)
-        seconds = (ms - int(ms)) * 60
+        (degrees, minutes, seconds) = degrees_to_dms(self.latitude)
 
         if cpoint:
             if self.longitude > 0:
@@ -123,14 +156,8 @@ class Location:
         '''
         Python DocString
         '''
-        rlat1 = math.radians(self.latitude)
-        rlong1 = math.radians(self.longitude)
 
-        rlat2 = math.radians(other.latitude)
-        rlong2 = math.radians(other.longitude)
-
-        dlat = rlat2 - rlat1
-        dlong =  rlong2 - rlong1
+        (rlat1, rlong1, rlat2, rlong2, dlat, dlong) = Location._convert_radians(self,other)
 
         a = math.pow(math.sin((dlat)/2),2) + math.cos(rlat1) * \
             math.cos(rlat2) * math.pow(math.sin((dlong)/2),2)
@@ -143,21 +170,35 @@ class Location:
         '''
         Python DocString
         '''
-
-        rlat1 = math.radians(self.latitude)
-        rlong1 = math.radians(self.longitude)
-
-        rlat2 = math.radians(other.latitude)
-        rlong2 = math.radians(other.longitude)
-
-        dlat = rlat2 - rlat1
-        dlong =  rlong2 - rlong1
+        (rlat1, rlong1, rlat2, rlong2, dlat, dlong) = Location._convert_radians(self,other)
 
         bx = math.cos(rlat2) * math.cos(dlong)
         by = math.cos(rlat2) * math.sin(dlong)
 
         lat = math.degrees(math.atan2(math.sin(rlat1) + math.sin(rlat2), math.sqrt((math.cos(rlat1) + bx) ** 2 + by ** 2)))
         long = math.degrees(rlong1 + math.atan2(by, math.cos(rlat1) + bx))
-        name = print(f"{self.name}-{other.name}")
+        name = print(f"Midpoint: {self.name}-{other.name}", lat, long)
         
         return Location (name, lat, long)
+
+    @classmethod
+    def random(cls) -> 'Location':
+        '''DocString'''
+        return cls(name= "Random Localization", latitude = random.uniform(cls.MIN_LATITUDE, cls.MAX_LATITUDE), longitude = random.uniform(cls.MIN_LONGITUDE, cls.MAX_LONGITUDE))
+
+    @classmethod
+    def count(cls) -> int:
+        '''DocString'''
+        return cls._counter
+
+    @staticmethod
+    def _convert_radians(l1: 'Location', l2: 'Location') -> tuple[float,float,float,float,float,float]:
+        rlat1 = math.radians(l1.latitude)
+        rlong1 = math.radians(l1.longitude)
+        rlat2 = math.radians(l2.latitude)
+        rlong2 = math.radians(l2.longitude)
+        dlat = rlat2 - rlat1
+        dlong =  rlong2 - rlong1
+        
+        return (rlat1, rlong1, rlat2, rlong2, dlat, dlong)
+EARTH_RADIUS
