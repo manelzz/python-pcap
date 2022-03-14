@@ -177,9 +177,8 @@ class Location:
 
         lat = math.degrees(math.atan2(math.sin(rlat1) + math.sin(rlat2), math.sqrt((math.cos(rlat1) + bx) ** 2 + by ** 2)))
         long = math.degrees(rlong1 + math.atan2(by, math.cos(rlat1) + bx))
-        name = print(f"Midpoint: {self.name}-{other.name}", lat, long)
-        
-        return Location (name, lat, long)
+                
+        return Location ("Midpoint: {self.name}-{other.name}", lat, long)
 
     @classmethod
     def random(cls) -> 'Location':
