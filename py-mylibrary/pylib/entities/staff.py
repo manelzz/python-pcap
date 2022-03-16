@@ -72,3 +72,67 @@ class Employee:
             category = "Obesity class III"
 
         return (bmi,category)
+
+    def __str__(self) -> str:
+        """Python DocString"""
+        return f"{self.code} > {self.fullname()}: {self.monthly_salary}"
+
+    def __len__(self) -> int:
+        """Python DocString"""
+        return self.seniority()
+
+    def __lt__(self, other: 'Employee') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Employee):
+            raise TypeError("You can only compare with another Employee")
+
+        return self.age() < other.age()
+
+    def __le__(self, other: 'Employee') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Employee):
+            raise TypeError("You can only compare with another Employee")
+
+        return self.age() <= other.age()
+
+    def __gt__(self, other: 'Employee') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Employee):
+            raise TypeError("You can only compare with another Employee")
+
+        return self.age() > other.age()
+
+    def __ge__(self, other: 'Employee') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Employee):
+            raise TypeError("You can only compare with another Employee")
+
+        return self.age() >= other.age()
+
+    
+    def __add__(self, value: int|float) -> 'Employee':
+        """Python DocString"""
+        self.monthly_salary += value
+        return self
+
+    def __sub__(self, value: int|float) -> 'Employee':
+        """Python DocString"""
+        self.monthly_salary -= value
+        return self
+    
+    def __mul__(self, value: int|float) -> 'Employee':
+        """Python DocString"""
+        self.monthly_salary *= value
+        return self
+
+    def __truediv__(self, value: int|float) -> 'Employee':
+        """Python DocString"""
+        self.monthly_salary /= value
+        return self
+
+    
+    def __del__(self):
+        """Python DocString"""
+        print("-" * 100)
+        print(f"Estoy muriendome --> {str(self)}")
+        print("-" * 100)
