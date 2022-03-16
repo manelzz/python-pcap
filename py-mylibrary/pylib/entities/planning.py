@@ -76,6 +76,69 @@ def year_progress(pretty:bool = True, year: int = current_year()) -> float|str:
     return f"{progress:.2%}" if pretty else progress * 100
     #raise NotImplementedError("Not yet implemented!!!")
 
+
+# def seconds_to_dhm(seconds: int)-> tuple[int,int,int]:
+#     #--> (days,hours,minutes)
+
+
+
 #DATA TYPES (CLASS)
 class Event:
-    pass
+    '''DocString'''    
+
+    from pylib.utils import strutils
+    from pylib.entities.geometry import Color
+
+    #ATRIBUTS a NIVELL DE CLASE
+    MIN_TIME = dt.datetime.strptime("00:00", "%H;%M")
+    MAX_TIME = dt.datetime.strptime("23:59", "%H;%M")
+    DEFAULT_BACKGROUND_COLOR: 'Color' = Color.to_hex("#CCCCCC")
+    DEFAULT_PUBLIC = True
+    DEFAULT_DESCRIPTION = strutils.EMPTY
+
+    def __init__(self, id:str, name:str, date: dt.date, start_time: dt.time, end_time: dt.time, background_color: 'Color', public: bool, description: str) -> None:
+        '''DocString'''
+        # id:               str       (strlutils.randcode())<---
+        # name:             str
+        # date:             date
+        # start_time:       time      <---Default: 00:00h
+        # end_time:         time      <---Default: 23:59h
+        # background_color: color     <---Default: #CCCCCC
+        # public:           bool      <---Default: true
+        # description:      str       <---Default: Empty String
+
+    #INICIALITZADOR CONTRUCTOR
+
+# id:               str       (strlutils.randcode())<---
+# name:             str
+# date:             date
+# start_time:       time      <---Default: 00:00h
+# end_time:         time      <---Default: 23:59h
+# background_color: color     <---Default: #CCCCCC
+# public:           bool      <---Default: true
+# description:      str       <---Default: Empty String
+
+
+    #COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
+
+# duration()    ---------> (hours, minutes)
+# time_left()   ---------> (days, hours, minutes)
+# time_passed() ---------> (days, hours, minutes)
+# upcoming()    ---------> bool
+# inprogress()  ---------> bool
+# finished()    ---------> bool
+# is_before(other) ------> bool
+# is_after(other)  ------> bool
+# overloaps(other) ------> bool
+# sample(cls)      ------> Event (@classmethod -> factory)
+# ----------------------------
+# __str__()
+# __repr__()
+# __len__() -------------> minutes
+# __sub__(other) -------------> (days, hous, minutes) between two events
+# __lt__(other)
+# __le__(other)
+# __gt__(other)
+# __ge__(other)
+
+#datetime.combine

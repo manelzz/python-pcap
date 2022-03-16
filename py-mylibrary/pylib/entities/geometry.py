@@ -2,9 +2,10 @@
 Geometry Module
 '''
 
+from abc import ABC
 import random
 from pylib.utils import mathutils
-class Color:
+class Color(object):
     
     #ATRIBUTOS O CAMPOS A NIVEL DE CLASE (STATIC/SHARED)
     MAX_VALUE: int = 255
@@ -19,6 +20,8 @@ class Color:
         self.red = red
         self.green = green
         self.blue = blue
+
+    
 
     @property
     def name(self) -> str:
@@ -123,6 +126,69 @@ class Color:
         return cls(name = "Color {text}", red = int(text[1:3], base = mathutils.BASE_HEX), green = int(text[3:5],mathutils.BASE_HEX), blue = int(text[5:7], base = mathutils.BASE_HEX))
 
     @classmethod
-    def count(cls, text: str) -> 'Color':
-        '''DocString'''
+    def count(cls) -> int:
+        '''Python DocString'''
         return cls._counter
+
+
+class AlphaColor(Color):
+
+    MAX_ALPHA: int = 100
+    MIN_ALPHA: int = 0
+
+    def __init__(self, name: str, red: int, green: int, blue: int, alpha: int):
+        super().__init__(name, red, green, blue)
+        self._alpha =alpha
+
+    @property
+    def alpha(self) -> int:
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, value: int):
+        if not isinstance(value, float):
+            raise TypeError("Valor Alpha no es float")
+        self._alpha = value
+
+    def to_rgb(self) -> str:
+        return f"{super().to_rgb()} - A: {self.alpha}%"
+
+    def to_hex(self, upper: bool = True) -> str:
+        return f"{super().to_hex(upper)} - A: {self.alpha}%"
+
+from abc import ABC,abstractmethod
+class Shape(ABC):
+    def __init__(self, background_color: 'Color', fore_color: 'Color') -> None:
+        self.background_color = background_color
+        self.fore_color = fore_color
+    
+    #obligamos a nuestros tipos hijos a implementar estos metodos
+    @abstractmethod
+    def area(self)-> float:
+        return
+
+    @abstractmethod
+    def perimeter(self)-> float:
+        return
+
+
+class Square(Shape):
+    def __init__(self, side: float|int, background_color: 'Color' = Color.from_hex("#CCCCCC"), fore_color: 'Color' = Color.from_hex("#00000")) -> None:
+        super().__init__(background_color, fore_color)
+        self._side = side
+    
+    @property
+    def side(self) -> float|int:
+        return self._side
+
+    def area(self) -> float:
+        return self.side ** 2
+    
+    def perimeter(self) -> float:
+        return self.side * 4
+
+class Rectangle(Shape):
+    pass
+
+class Triangle(Shape):
+    pass

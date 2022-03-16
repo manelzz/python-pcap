@@ -2,22 +2,22 @@
 Staff Module
 '''
 
-from code import interact
-from datetime import date, datetime
+from datetime import date
 
 from pylib.utils import strutils
 import math
 
 
-class Employee:
+class Employee(object):
 
     #ATRIBUTOS O CAMPOS A NIVEL DE CLASE (STATIc/SHARED)
     DEFAULT_SALARY: float = 1200.0
     DEFAULT_PAYMENTS: int  = 12
+    DEFAULT_COMISSION: float = 3000
     _counter: int = 0
 
     #INICIALIZADOR DE OBJETO (CONSTRUCTOR)
-    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, monthly_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS, hiredate: date = date.today()):
+    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, monthly_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS, hiredate: date = date.today(), comission: float = DEFAULT_COMISSION):
         # ----> []object > Inicializar el estado de este objeto
         #Inicializamos los atributos o campos de instanacia a objeto (self.XXX)
         Employee._counter +=1
@@ -30,6 +30,7 @@ class Employee:
         self.monthly_salary = monthly_salary
         self.payments = payments
         self.hiredate = hiredate
+        self.comission = comission
 
     #COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
     def fullname(self) -> str:
@@ -136,3 +137,18 @@ class Employee:
         print("-" * 100)
         print(f"Estoy muriendome --> {str(self)}")
         print("-" * 100)
+
+class SalesEmployee(Employee):
+
+    DEFAULT_COMISSION: float = 3000
+
+    #INICIALIZADOR DE OBJETO (CONSTRUCTOR)
+    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, monthly_salary:float = Employee.DEFAULT_SALARY, payments: int = Employee.DEFAULT_PAYMENTS, hiredate: date = date.today(), comission: float = DEFAULT_COMISSION):
+        # ----> []object > Inicializar el estado de este objeto
+        #Inicializamos los atributos o campos de instanacia a objeto (self.XXX)
+        super().__init__(firstname, lastname, birthdate, height, weight, hiredate, monthly_salary, payments)
+        self.comission = comission
+
+    def annual_salary(self) -> float:
+        '''DocString'''
+        return super().annual_salary() + self.comission

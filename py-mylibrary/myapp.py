@@ -3,18 +3,19 @@ Main module
 '''
 
 from datetime import date
-import math
-from pylib.entities import geography
-from pylib.entities import geometry
-from pylib.utils import mathutils
-from pylib.entities import planning
-from pylib.utils import strutils
-from pylib.utils import sysutils
-from pylib.entities import staff
+from unicodedata import decimal
+
+from pylib.utils import strutils          #pylib.utils.strutils
+from pylib.utils import mathutils         #pylib.utils.mathutils
+from pylib.utils import sysutils          #pylib.utils.sysutils
+from pylib.entities import planning       #pylib.entities.planning
+from pylib.entities import geography      #pylib.entities.geography
+from pylib.entities import geometry       #pylib.entities.geometry
+from pylib.entities import staff          #pylib.entities.staff
 
 from pylib.entities.geography import Location
-from pylib.entities.staff import Employee
-from pylib.entities.geometry import Color
+from pylib.entities.staff import Employee, SalesEmployee
+from pylib.entities.geometry import Color, Shape, Square, Rectangle, Triangle, AlphaColor
 
 
 def main():
@@ -82,12 +83,13 @@ def main():
 
     print(F"Default Salary: {Employee.DEFAULT_SALARY}")
     print(F"Default payments: {Employee.DEFAULT_PAYMENTS}")
-    e1 = Employee(firstname="Jordi", lastname="Ariño", birthdate=date(year=1995, month=2, day=1), height= 1.80, weight=65, hiredate = date(year = 2022, month= 9, day=1))
-    e2 = Employee(firstname="Ramón", lastname="Carles", birthdate=date(year=1995, month=2, day=1), height= 1.70, weight=80, hiredate = date(year = 2021, month= 2, day=2))
+    e1 = Employee(firstname = "Jordi", lastname = "Ariño", birthdate = date(year = 1980, month = 10, day = 23), height = 1.86, weight = 80, hiredate = date(year = 1995, month = 5, day = 5))
+    e2 = Employee(firstname = "Ramon", lastname = "Carles", birthdate = date(year = 1985, month = 11, day = 15), height = 1.76, weight = 70, hiredate = date(year = 2012, month = 5, day = 5))
     e3 = Employee(firstname="Elisabet", lastname="Castro", birthdate=date(year=1995, month=2, day=1), height= 1.70, weight=70)
     e4 = Employee(firstname="Enrique", lastname="Ramirez", birthdate=date(year=1995, month=2, day=1), height= 1.75, weight=73)
     e5 = Employee(firstname="Jordi", lastname="Alejandro", birthdate=date(year=1995, month=2, day=1), height= 1.85, weight=60)
-    employees =(e1,e2,e3,e4,e5)
+    e6 = SalesEmployee(firstname="Vladimir", lastname="Putin", birthdate=date(year=1995, month=2, day=1), height= 1.85, weight=60, comission= 1000)
+    employees =(e1,e2,e3,e4,e5,e6)
     for employee in employees:
         print(F"-"*50)
         print(F"Code: {employee.code}")
@@ -106,7 +108,8 @@ def main():
     print(e1 >= e2)
     print(e1 < e2)
     print(e1 <= e2)
-    print(len(e1))
+    print(e1)
+    #print(len(e1))
     
     print(e1)
     e1 * 5
@@ -119,6 +122,8 @@ def main():
     
     print(F"Counter: {Employee._counter}")
 
+    c = Square(side = 2)
+    print(f"Square side 2: {c}")
 
     print(F"Latitude: ({Location.MIN_LATITUDE:+},{Location.MAX_LATITUDE:+})")
     print(F"Longitude: ({Location.MIN_LONGITUDE:+},{Location.MAX_LONGITUDE:+}))")
@@ -181,8 +186,10 @@ def main():
     c7 = Color.random()
     c8 = Color.from_hex("#FF00FF")
     c9 = Color.from_hex("#FF05F5")
+    c10 = AlphaColor(name= "My Color #1", red = 255, green= 255, blue=255, alpha = 50)
+    c11 = AlphaColor(name= "My Color #2", red = 255, green= 255, blue=255, alpha = 10)
 
-    colors = (c1, c2, c3, c4, c5, c6, c7, c8, c9)
+    colors = (c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11)
     for color in colors:
         print("-" * 150)
         print(color)
