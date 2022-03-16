@@ -38,156 +38,133 @@ class Location:
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
-
     @property
-    def name(self):
-        '''DocString'''
+    def name(self) -> str:
+        '''Python Docstring'''
         return self._name
 
     @name.setter
     def name(self, value: str):
-        '''DocString'''
+        '''Python Docstring'''
+        if not isinstance(value, str):
+            raise TypeError(f"The name must be of type str.")
+
         self._name = value
-    
+
     @property
-    def latitude(self):
-        '''DocString'''
+    def latitude(self) -> float:
+        '''Python Docstring'''
         return self._latitude
 
     @latitude.setter
     def latitude(self, value: float):
-        '''DocString'''
+        '''Python Docstring'''
+        if not isinstance(value, float) and not isinstance(value, int):
+            raise TypeError(f"The latitude must be of type float or int.")
+        if value < Location.MIN_LATITUDE or value > Location.MAX_LATITUDE:
+            raise ValueError(f"The latitude is out of range. Range: {Location.MIN_LATITUDE}, {Location.MAX_LATITUDE}")    
+
         self._latitude = value
-    
+
     @property
-    def longitude(self):
-        '''DocString'''
+    def longitude(self) -> float:
+        '''Python Docstring'''
         return self._longitude
-
+    
     @longitude.setter
-    def longitude(self, value:float):
-        '''DocString'''
+    def longitude(self, value: float):
+        '''Python Docstring'''
+        if not isinstance(value, float) and not isinstance(value, int):
+            raise TypeError(f"The longitude must be of type float or int.")
+        if value < Location.MIN_LONGITUDE or value > Location.MAX_LONGITUDE:
+            raise ValueError(f"The longitude is out of range. Range: {Location.MIN_LONGITUDE}, {Location.MAX_LONGITUDE}")    
+
         self._longitude = value
-
-    # Interpolations strings
-
-    def latitude_deg(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
-        if cpoint:
-            if self.latitude > 0:
-                cp = "N"
-            else: 
-                cp = "S"
-                self.latitude = self.latitude * (-1)
         
-        return f"{abs(self.latitude):.{decimals}f} {strutils.DEGREES} {cp}" if cpoint else f"{self.latitude:.{decimals}f} {strutils.DEGREES}"
-     
-
+    
+    # COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
+    def latitude_deg(self, decimals: int = 5, cpoint: bool = True) -> str:
+        """Python DocString"""
+        return f"{self.latitude:.{decimals}f}{strutils.DEGREES}" if not cpoint else f"{abs(self.latitude):.{decimals}f}{strutils.DEGREES} {'N' if self.latitude >= 0 else 'S'}"
 
     def longitude_deg(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
-        if cpoint:
-            if self.longitude > 0:
-                cp = "E"
-            else:
-                self.longitude = self.longitude * (-1)
-                cp = "O"
-        
-        return f"{abs(self.longitude):.{decimals}f} {strutils.DEGREES} {cp}" if cpoint else f"{self.longitude:.{decimals}f} {strutils.DEGREES}"
-
+        """Python DocString"""
+        return f"{self.longitude:.{decimals}f}{strutils.DEGREES}" if not cpoint else f"{abs(self.longitude):.{decimals}f}{strutils.DEGREES} {'E' if self.longitude >= 0 else 'W'}"
     
     def to_degrees(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
-        return f"Latitut: {self.latitude_deg(decimals, cpoint)} Longitut: {self.longitude_deg(decimals, cpoint)}"
+        """Python DocString"""
+        return f"{self.latitude_deg(decimals, cpoint)} {self.longitude_deg(decimals, cpoint)}"
 
 
-    # ----------------------------------------------------
-
-    # Interpolation string + math operations
-    
     def latitude_dms(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
+        """Python DocString"""
         (degrees, minutes, seconds) = degrees_to_dms(self.latitude)
-
-        if cpoint:
-            if self.longitude > 0:
-                cp = "N"
-            else:
-                self.longitude = self.longitude * (-1)
-                cp = "S"
-
-        return f"{abs(degrees)}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds}{strutils.DOUBLE_PRIME} {cp}" if cpoint else f"{degrees}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds}{strutils.DOUBLE_PRIME}"
-
+        return f"{degrees}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds:.{decimals}f}{strutils.DOUBLE_PRIME}" if not cpoint else f"{abs(degrees)}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds:.{decimals}f}{strutils.DOUBLE_PRIME} {'N' if degrees >= 0 else 'S'}"
 
     def longitude_dms(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
-        (degrees, minutes, seconds) = degrees_to_dms(self.latitude)
-
-        if cpoint:
-            if self.longitude > 0:
-                cp = "E"
-            else:
-                self.longitude = self.longitude * (-1)
-                cp = "O"
-
-        return f"{abs(degrees)}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds}{strutils.DOUBLE_PRIME} {cp}" if cpoint else f"{degrees}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds}{strutils.DOUBLE_PRIME}"
+        """Python DocString"""
+        (degrees, minutes, seconds) = degrees_to_dms(self.longitude)
+        return f"{degrees}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds:.{decimals}f}{strutils.DOUBLE_PRIME}" if not cpoint else f"{abs(degrees)}{strutils.DEGREES} {minutes}{strutils.PRIME} {seconds:.{decimals}f}{strutils.DOUBLE_PRIME} {'E' if degrees >= 0 else 'W'}"
 
     def to_dms(self, decimals: int = 5, cpoint: bool = True) -> str:
-        '''
-        Python DocString
-        '''
-        return f"Latitut: {self.latitude_dms(decimals, cpoint)} Longitude: {self.longitude_dms(decimals, cpoint)}"
-    
-    # ----------------------------------------------------
-    
-    # Match operations
+        """Python DocString"""
+        return f"{self.latitude_dms(decimals, cpoint)}  {self.longitude_dms(decimals, cpoint)}"
 
     def distance_to(self, other: 'Location') -> float:
-        '''
-        Python DocString
-        '''
-
-        (rlat1, rlong1, rlat2, rlong2, dlat, dlong) = Location._convert_radians(self,other)
-
-        a = math.pow(math.sin((dlat)/2),2) + math.cos(rlat1) * \
-            math.cos(rlat2) * math.pow(math.sin((dlong)/2),2)
-        c= 2 * math.atan2(math.sqrt(a),math.sqrt(1-a))
+        """Python DocString"""
+        (rlat1, rlong1, rlat2, rlong2, dlat, dlong)  = Location._convert_radians(self, other)
+        a = math.pow(math.sin(dlat/2), 2) + math.cos(rlat1) * math.cos(rlat2) * math.pow(math.sin(dlong/2), 2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         return EARTH_RADIUS * c
-        
-        raise NotImplementedError("Not yet implemented!")
 
     def midpoint_to(self, other: 'Location') -> 'Location':
-        '''
-        Python DocString
-        '''
-        (rlat1, rlong1, rlat2, rlong2, dlat, dlong) = Location._convert_radians(self,other)
-
+        """Python DocString"""
+        (rlat1, rlong1, rlat2, rlong2, dlat, dlong)  = Location._convert_radians(self, other)
         bx = math.cos(rlat2) * math.cos(dlong)
         by = math.cos(rlat2) * math.sin(dlong)
-
         lat = math.degrees(math.atan2(math.sin(rlat1) + math.sin(rlat2), math.sqrt((math.cos(rlat1) + bx) ** 2 + by ** 2)))
         long = math.degrees(rlong1 + math.atan2(by, math.cos(rlat1) + bx))
-                
-        return Location ("Midpoint: {self.name}-{other.name}", lat, long)
+        
+        return Location(f"Midpoint: {self.name}-{other.name}", lat, long)
 
+
+    def __str__(self) -> str:
+        """Python DocString"""
+        return f"{self.name} > {self.to_dms()}"
+    
+
+    def __eq__(self, other: 'Location') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Location):
+            raise TypeError(f"The value to compare must be of type Location")
+        
+        return self.latitude == other.latitude and self.longitude == other.longitude
+
+    def __ne__(self, other: 'Location') -> bool:
+        """Python DocString"""
+        if not isinstance(other, Location):
+            raise TypeError(f"The value to compare must be of type Location")
+        
+        return not self.__eq__(other)
+
+
+    def __sub__(self, other: 'Location') -> 'Location':
+        """Python DocString"""
+        if not isinstance(other, Location):
+            raise TypeError(f"The value to substract must be of type Location")
+        
+        return self.midpoint_to(other)
+
+
+    # MÉTODOS/OPERACIONES A NIVEL DE CLASE 
     @classmethod
     def random(cls) -> 'Location':
-        '''DocString'''
-        return cls(name= "Random Localization", latitude = random.uniform(cls.MIN_LATITUDE, cls.MAX_LATITUDE), longitude = random.uniform(cls.MIN_LONGITUDE, cls.MAX_LONGITUDE))
+        """Python DocString"""
+        return cls(name = "Random Localization", latitude = random.uniform(cls.MIN_LATITUDE, cls.MAX_LATITUDE), longitude = random.uniform(cls.MIN_LONGITUDE, cls.MAX_LONGITUDE))
 
     @classmethod
     def count(cls) -> int:
-        '''DocString'''
+        """Python DoctString"""
         return cls._counter
 
     @staticmethod
@@ -197,7 +174,5 @@ class Location:
         rlat2 = math.radians(l2.latitude)
         rlong2 = math.radians(l2.longitude)
         dlat = rlat2 - rlat1
-        dlong =  rlong2 - rlong1
-        
-        return (rlat1, rlong1, rlat2, rlong2, dlat, dlong)
-EARTH_RADIUS
+        dlong = rlong2 - rlong1
+        return (rlat1,rlong1,rlat2,rlong2,dlat,dlong)

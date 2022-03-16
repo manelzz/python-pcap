@@ -17,7 +17,7 @@ class Employee:
     _counter: int = 0
 
     #INICIALIZADOR DE OBJETO (CONSTRUCTOR)
-    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, month_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS, hiredate: date = date.today()):
+    def __init__(self, firstname: str, lastname: str, birthdate: date, height: float, weight: float, monthly_salary:float = DEFAULT_SALARY, payments: int = DEFAULT_PAYMENTS, hiredate: date = date.today()):
         # ----> []object > Inicializar el estado de este objeto
         #Inicializamos los atributos o campos de instanacia a objeto (self.XXX)
         Employee._counter +=1
@@ -27,7 +27,7 @@ class Employee:
         self.birthdate = birthdate
         self.height = height
         self.weight = weight
-        self.month_salary = month_salary
+        self.monthly_salary = monthly_salary
         self.payments = payments
         self.hiredate = hiredate
 

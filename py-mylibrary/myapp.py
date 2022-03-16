@@ -94,13 +94,29 @@ def main():
         print(F"Firstname: {employee.firstname}")
         print(F"Lastname: {employee.lastname}")
         print(F"Birthdate: {employee.birthdate}")
-        print(F"Month Salary: {employee.month_salary}")
+        print(F"Month Salary: {employee.monthly_salary}")
         print(F"Payments: {employee.payments}")
         print(F"Fullname: {employee.fullname()}")
         print(F"Reverse Name: {employee.reverse_name()}")
         print(F"Age: {employee.age()}")
         print(F"BMI: {employee.bmi()}")
         print(F"-"*50)
+
+    print(e1 > e2)
+    print(e1 >= e2)
+    print(e1 < e2)
+    print(e1 <= e2)
+    print(len(e1))
+    
+    print(e1)
+    e1 * 5
+    print(e1)
+    print(e1)
+    e1 + 100
+    print(e1)
+    e1 - 100
+    print(e1)
+    
     print(F"Counter: {Employee._counter}")
 
 
@@ -136,6 +152,25 @@ def main():
         print(f"Distancia: {location.distance_to(mad)} Km")
         print(f"Punt intermig: {location.midpoint_to(mad).to_degrees()}")
 
+    print(f"BCN-MAD: {bcn.distance_to(mad)} Km")
+    print(f"BCN-NY: {bcn.distance_to(ny)} Km")
+    print(f"BCN-NY: {bcn.distance_to(paris)} Km")
+
+    print(f"BCN-MAD: {bcn.midpoint_to(mad).to_degrees()}")
+    print(f"BCN-NY: {bcn.midpoint_to(ny).to_degrees()}")
+    print(f"BCN-NY: {bcn.midpoint_to(paris).to_degrees()}")
+    
+    print(F"Counter: {Location.count()}")
+
+    print("*" * 150)
+    print("*" * 150)
+    coord = Location(name = "5", latitude = 85.0, longitude = 15.0)
+    print("*" * 150)
+    print("*" * 150)
+    
+    print("*" * 150)
+    print("*" * 150)
+    
     print(F"RGB Limits: ({Color.MIN_VALUE},{Color.MAX_VALUE})")
     c1 = Color(name="Black", red=0, green=0, blue=0)
     c2 = Color(name="White", red=255, green=255, blue=255)
@@ -143,14 +178,41 @@ def main():
     c4 = Color(name="Black", red=0, green=0, blue=0)
     c5 = Color(name="White", red=255, green=255, blue=255)
     c6 = Color.random()
-    c7 = Color.from_hex("#FF00F")
-    colors = [c1,c2,c3,c4,c5,c6,c7]
+    c7 = Color.random()
+    c8 = Color.from_hex("#FF00FF")
+    c9 = Color.from_hex("#FF05F5")
+
+    colors = (c1, c2, c3, c4, c5, c6, c7, c8, c9)
     for color in colors:
-        print("-" * 50)
+        print("-" * 150)
+        print(color)
         print(f"Color: {color.to_hex()}")
         print(f"Color: {color.to_rgb()}")
-        print("-" * 50)
-    print(F"Counter: {Color._counter}")
+        print("-" * 150)
+    
+    print(F"Counter: {Color.count()}")
+
+
+    print("*" * 150)
+    print("*" * 150)
+    print("*" * 150)
+    color1 = Color("Black", 0, 0, 0)
+    color2 = Color("Black", 0, 0, 0)
+    print(color1)
+    print(hex(id(color1)))
+    print(color2)
+    print(hex(id(color2)))
+    print(color1 == color2)
+    print(color1 is color2)
+    
+    loc1 = Location("XX", 45.0, 25.5)
+    loc2 = Location("XX", 45.0, 25.5)
+    print(loc1)
+    print(loc2)
+    print(loc1 == loc2)
+    print(loc1 is loc2)
+
+    print(bcn - mad)
 
 
 if __name__ == "__main__":
