@@ -3,6 +3,14 @@ Planning Utilities and Entities
 '''
 import datetime as dt
 
+from numpy import integer
+from pylib.entities import geometry
+from pylib.utils import strutils
+
+from pylib.utils import strutils
+from pylib.entities.geometry import Color
+import datetime as dt
+
 JANUARY = 1
 FEBRUARY = 2
 MARCH = 3
@@ -77,68 +85,135 @@ def year_progress(pretty:bool = True, year: int = current_year()) -> float|str:
     #raise NotImplementedError("Not yet implemented!!!")
 
 
-# def seconds_to_dhm(seconds: int)-> tuple[int,int,int]:
-#     #--> (days,hours,minutes)
-
+def seconds_to_dhm(seconds: int)-> tuple[int,int,int]:
+    '''Convert seconds into --> (days,hours,minutes)'''
+    days= seconds//86400
+    hours= (seconds-(days*86400))//3600
+    minuts= (seconds - ((days*86400) + (hours*3600)))//60
+    return [days, hours, minuts]
 
 
 #DATA TYPES (CLASS)
-class Event:
+class Event():
     '''DocString'''    
-
-    from pylib.utils import strutils
-    from pylib.entities.geometry import Color
-
     #ATRIBUTS a NIVELL DE CLASE
-    MIN_TIME = dt.datetime.strptime("00:00", "%H;%M")
-    MAX_TIME = dt.datetime.strptime("23:59", "%H;%M")
-    DEFAULT_BACKGROUND_COLOR: 'Color' = Color.to_hex("#CCCCCC")
+    MIN_TIME = dt.time(hour=0, minute=0)
+    MAX_TIME = dt.time(hour=23, minute=59)
+    DEFAULT_BACKGROUND_COLOR: 'Color' = Color.from_hex("#CCCCCC")
     DEFAULT_PUBLIC = True
     DEFAULT_DESCRIPTION = strutils.EMPTY
 
-    def __init__(self, id:str, name:str, date: dt.date, start_time: dt.time, end_time: dt.time, background_color: 'Color', public: bool, description: str) -> None:
-        '''DocString'''
-        # id:               str       (strlutils.randcode())<---
-        # name:             str
-        # date:             date
-        # start_time:       time      <---Default: 00:00h
-        # end_time:         time      <---Default: 23:59h
-        # background_color: color     <---Default: #CCCCCC
-        # public:           bool      <---Default: true
-        # description:      str       <---Default: Empty String
-
     #INICIALITZADOR CONTRUCTOR
+    def __init__(self, name:str, date: dt.date, start_time: dt.time = MIN_TIME, end_time: dt.time = MAX_TIME, background_color: 'Color' = DEFAULT_BACKGROUND_COLOR, public: bool = True, description: str = strutils.EMPTY):
+        '''DocString'''
 
-# id:               str       (strlutils.randcode())<---
-# name:             str
-# date:             date
-# start_time:       time      <---Default: 00:00h
-# end_time:         time      <---Default: 23:59h
-# background_color: color     <---Default: #CCCCCC
-# public:           bool      <---Default: true
-# description:      str       <---Default: Empty String
-
+        self.id:str = strutils.randcode()
+        self.name:str = name
+        self.date: dt.date = date
+        self.start_time: dt.time = start_time
+        self.end_time: dt.time = end_time
+        self.background_color: 'Color' = background_color
+        self.public: bool = public
+        self.description: str = strutils.EMPTY
 
     #COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
 
-# duration()    ---------> (hours, minutes)
-# time_left()   ---------> (days, hours, minutes)
-# time_passed() ---------> (days, hours, minutes)
-# upcoming()    ---------> bool
-# inprogress()  ---------> bool
-# finished()    ---------> bool
-# is_before(other) ------> bool
-# is_after(other)  ------> bool
-# overloaps(other) ------> bool
-# sample(cls)      ------> Event (@classmethod -> factory)
-# ----------------------------
-# __str__()
-# __repr__()
-# __len__() -------------> minutes
-# __sub__(other) -------------> (days, hous, minutes) between two events
-# __lt__(other)
-# __le__(other)
-# __gt__(other)
-# __ge__(other)
+    def duration(self)-> tuple[int, int]:
+        '''duration()    ---------> (hours, minutes)'''
+        duration = self.end_time - self.start_time
+        #return [f"{duration.hours:d%}", f"{duration.minuts:d%}"]
+        return [duration.strptime(duration,"%H"),duration.strptime(duration,"%M")]
 
-#datetime.combine
+    def time_left(self)-> tuple[int, int, int]:
+        '''time_left()   ---------> (days, hours, minutes)'''
+        pass
+
+    def time_passed(self) -> tuple[int, int, int]:
+        '''time_passed() ---------> (days, hours, minutes)'''
+        pass
+
+    def upcoming(self) -> bool:
+        '''upcoming()    ---------> bool'''
+        pass
+    
+    def inprogress(self) -> bool:
+        '''inprogress()  ---------> bool'''
+        pass
+
+    def finished(self) -> bool:
+        '''finished()    ---------> bool'''
+        pass    
+
+    def is_before(self, other) -> bool:
+        '''is_before(other) ------> bool'''
+        pass
+
+    def is_after(self, other) -> bool:
+        '''is_after(other)  ------> bool'''
+        pass
+
+    def overloaps(self, other) -> bool:
+        '''overloaps(other) ------> bool'''
+        pass
+    
+    def sample(self, cls) -> 'Event':
+        '''sample(cls)      ------> Event (@classmethod -> factory)'''
+        pass
+    
+    # # MÉTODOS/OPERACIONES A NIVEL DE CLASE 
+    # @classmethod
+    # def random(cls) -> 'Location':
+    #     """Python DocString"""
+    #     return cls(name = "Random Localization", latitude = random.uniform(cls.MIN_LATITUDE, cls.MAX_LATITUDE), longitude = random.uniform(cls.MIN_LONGITUDE, cls.MAX_LONGITUDE))
+
+    #datetime.combine
+
+
+    def __str__(self) -> str:
+        """__str__()"""
+        return f"{self.id} > {self.name()}: {self.date} {self.start_time}-{self.end_time}. {self.description}"
+
+    def __repr__(self):
+        """__repr__() -> Mostra Event (nom, data i data inici)"""
+        return f"{self.name},{self.date} {self.start_time}-{self.end_time}. {self.description}"
+
+    def __len__(self) -> int:
+        """__len__() -------------> minutes"""
+        return self.end_time - self.start_time
+
+    def __sub__(self,other: 'Event') -> tuple[int, int, int]:
+        # """sub__(other) -------------> (days, hous, minutes) between two events"""
+        if not isinstance(other, Event):
+            raise TypeError("You can only sub with another Event")
+
+        #start_time = self.start_time.strftime("%H:%M")
+        #end_time = self.end_time.strftime("%H:%M")
+        return [0,0,0]
+    
+
+    def __lt__(self, other: 'Event') -> bool:
+        """__lt__(other)"""
+        if not isinstance(other, Event):
+            raise TypeError("You can only compare with another Event")
+        return 
+
+    def __le__(self, other: 'Event') -> bool:
+        """__le__(other)"""
+        if not isinstance(other, Event):
+            raise TypeError("You can only compare with another Event")
+
+        return 
+
+    def __gt__(self, other: 'Event') -> bool:
+        """__gt__(other)"""
+        if not isinstance(other, Event):
+            raise TypeError("You can only compare with another Event")
+
+        return 
+
+    def __ge__(self, other: 'Event') -> bool:
+        """__ge__(other)"""
+        if not isinstance(other, Event):
+            raise TypeError("You can only compare with another Event")
+
+        return 

@@ -1,9 +1,7 @@
 '''
-Main module
+Main Module
 '''
-
-from datetime import date
-from unicodedata import decimal
+from datetime import date,datetime,timedelta
 
 from pylib.utils import strutils          #pylib.utils.strutils
 from pylib.utils import mathutils         #pylib.utils.mathutils
@@ -15,7 +13,8 @@ from pylib.entities import staff          #pylib.entities.staff
 
 from pylib.entities.geography import Location
 from pylib.entities.staff import Employee, SalesEmployee
-from pylib.entities.geometry import Color, Shape, Square, Rectangle, Triangle, AlphaColor
+from pylib.entities.geometry import Color, AlphaColor, Shape, Square, Triangle, Rectangle
+from pylib.entities.planning import Event
 
 
 def main():
@@ -222,6 +221,23 @@ def main():
     print(bcn - mad)
 
 
+    print("EVENTS")
+    seconds = (60+1, 3600+1, (3600*24)+1, (3600*24+1))
+    for secs in seconds:
+        [days, hours, minuts] = planning.seconds_to_dhm(secs)
+        print(f"{secs} segons -> Days: {days} hours: {hours} minuts: {minuts}")
+    
+    print(datetime.now() - timedelta(hours=1))
+
+    event1 = Event(name = "Event1", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event1 Description")
+    event2 = Event(name = "Event2", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event2 Description")
+    event3 = Event(name = "Event3", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event3 Description")
+    event4 = Event(name = "Event4", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event4 Description")
+    #event5 = Event(name = "Event5", date = datetime.now(), description = "Event5 Now Description")
+    events =(event1,event2,event3,event4)
+
+    for event in events:
+        print(f"{event.name}: Duration: {event.duration()}")
+
 if __name__ == "__main__":
     main()
-    
