@@ -1,15 +1,13 @@
 '''
 Planning Utilities and Entities
 '''
-import datetime as dt
-
-from numpy import integer
+import calendar as c
+from datetime import datetime, date, time
+import math
 from pylib.entities import geometry
-from pylib.utils import strutils
-
-from pylib.utils import strutils
+from pylib.utils import mathutils, strutils
 from pylib.entities.geometry import Color
-import datetime as dt
+
 
 JANUARY = 1
 FEBRUARY = 2
@@ -28,20 +26,20 @@ DECEMBER = 12
 #CLASS LEVEL FUNCTIONS
 def current_year() -> int:
     ''' Return the current year'''
-    today = dt.date.today()
+    today = date.today()
     return today.year
 
 def elapsed_days() -> int:
     ''' Return the days passed the current year'''
-    today = dt.date.today()
-    first_day_current_year = dt.date(year = today.year, month = JANUARY, day =1)
+    today = date.today()
+    first_day_current_year = date(year = today.year, month = JANUARY, day =1)
     interval = today - first_day_current_year
     return interval.days + 1
 
 def remaining_days() -> int:
     ''' Return the days to end the current year'''
-    today = dt.date.today()
-    last_day_current_year = dt.date(year = today.year, month = DECEMBER, day =31)
+    today = date.today()
+    last_day_current_year = date(year = today.year, month = DECEMBER, day =31)
     interval = last_day_current_year - today
     return interval.days
 
@@ -94,126 +92,213 @@ def seconds_to_dhm(seconds: int)-> tuple[int,int,int]:
 
 
 #DATA TYPES (CLASS)
-class Event():
-    '''DocString'''    
-    #ATRIBUTS a NIVELL DE CLASE
-    MIN_TIME = dt.time(hour=0, minute=0)
-    MAX_TIME = dt.time(hour=23, minute=59)
-    DEFAULT_BACKGROUND_COLOR: 'Color' = Color.from_hex("#CCCCCC")
-    DEFAULT_PUBLIC = True
-    DEFAULT_DESCRIPTION = strutils.EMPTY
+class Event(object):
+    '''Python DocString'''
 
-    #INICIALITZADOR CONTRUCTOR
-    def __init__(self, name:str, date: dt.date, start_time: dt.time = MIN_TIME, end_time: dt.time = MAX_TIME, background_color: 'Color' = DEFAULT_BACKGROUND_COLOR, public: bool = True, description: str = strutils.EMPTY):
-        '''DocString'''
+    MIN_DURATION: int = 30
+    NAME_MAX_LENGTH: int = 50
+    DEFAULT_COLOR: 'Color' = Color.from_hex("#CCCCCC")
 
-        self.id:str = strutils.randcode()
-        self.name:str = name
-        self.date: dt.date = date
-        self.start_time: dt.time = start_time
-        self.end_time: dt.time = end_time
-        self.background_color: 'Color' = background_color
-        self.public: bool = public
-        self.description: str = strutils.EMPTY
+    def __init__(self, name: str, date: date, start_time: time = time(hour = 0, minute = 0, second = 0), end_time: time = time(hour = 23, minute = 59, second = 59), background_color: 'Color' = DEFAULT_COLOR, public: bool = True, description: str = strutils.EMPTY):
+        """Python Docstring"""
+        #------>[] Initalize state of object
+        self._id = strutils.randcode(length = 6, digits = False)
+        self.name = name
+        self.date = date
+        self.start_time = start_time
+        self.end_time = end_time
+        self.background_color = background_color
+        self.public = public
+        self.description = description  
 
-    #COMPORTAMIENTO: METODOS/OPERACIONES A NIVEL DE OBJETO O INSTANCIA
 
-    def duration(self)-> tuple[int, int]:
-        '''duration()    ---------> (hours, minutes)'''
-        duration = self.end_time - self.start_time
-        #return [f"{duration.hours:d%}", f"{duration.minuts:d%}"]
-        return [duration.strptime(duration,"%H"),duration.strptime(duration,"%M")]
+    @property
+    def id(self) -> str:
+        """Python Docstring"""
+        return self._id
 
-    def time_left(self)-> tuple[int, int, int]:
-        '''time_left()   ---------> (days, hours, minutes)'''
-        pass
+    @property
+    def name(self) -> str:
+        """Python Docstring"""
+        return self._name
 
-    def time_passed(self) -> tuple[int, int, int]:
-        '''time_passed() ---------> (days, hours, minutes)'''
-        pass
+    @name.setter
+    def name(self, value: str):
+        """Python Docstring"""
+        if not type(value) is str:
+            raise TypeError(f"Attribute name must be of type str. You passed a {value.__class__.__name__}")
+
+        self._name = value
+
+    @property
+    def date(self) -> date:
+        """Python Docstring"""
+        return self._date
+
+    @date.setter
+    def date(self, value: date):
+        """Python Docstring"""
+        if not type(value) is date:
+            raise TypeError(f"Attribute date must be of type date. You passed a {value.__class__.__name__}")
+        
+        self._date = value
+
+    @property
+    def start_time(self) -> time:
+        """Python Docstring"""
+        return self._start_time
+
+    @start_time.setter
+    def start_time(self, value: time):
+        """Python Docstring"""
+        if not type(value) is time:
+            raise TypeError(f"Attribute start_time must be of type time. You passed a {value.__class__.__name__}")
+        
+        self._start_time = value
+
+    @property
+    def end_time(self) -> time:
+        """Python Docstring"""
+        return self._end_time
+
+    @end_time.setter
+    def end_time(self, value: time):
+        """Python Docstring"""
+        if not type(value) is time:
+            raise TypeError(f"Attribute end_time must be of type time. You passed a {value.__class__.__name__}")
+        
+        self._end_time = value
+
+    @property
+    def background_color(self) -> 'Color':
+        """Python Docstring"""
+        return self._background_color
+
+    @background_color.setter
+    def background_color(self, value: 'Color'):
+        """Python Docstring"""
+        if not type(value) is Color:
+            raise TypeError(f"Attribute color must be of type Color. You passed a {value.__class__.__name__}")
+       
+        self._background_color = value
+
+    @property
+    def public(self) -> bool:
+        """Python Docstring"""
+        return self._public
+
+    @public.setter
+    def public(self, value: bool):
+        """Python Docstring"""
+        if not type(value) is bool:
+            raise TypeError(f"Attribute public must be of type bool. You passed a {value.__class__.__name__}")
+       
+        self._public = value
+
+    @property
+    def description(self) -> str:
+        """Python Docstring"""
+        return self._description
+
+    @description.setter
+    def description(self, value: str):
+        """Python Docstring"""
+        if not type(value) is str:
+            raise TypeError(f"Attribute description must be of type str. You passed a {value.__class__.__name__}")
+       
+        self._description = value
+
+
+
+    def duration(self) -> tuple[int,int]:
+        """Python Docstring"""
+        interval = self._end_datetime() - self._start_datetime()
+        (days, hours, minutes) = seconds_to_dhm(interval.total_seconds())
+        return (hours, minutes)
+
+
+    def time_left(self) -> tuple[int,int,int]:
+        """Python Docstring"""
+        now = datetime.now()
+        interval = self._start_datetime() - now
+        (days, hours, minutes) = seconds_to_dhm(interval.total_seconds())
+        return (days, hours, minutes)
+
+    def time_passed(self) -> tuple[int,int,int]:
+        """Python Docstring"""
+        now = datetime.now()
+        interval = now - self._end_datetime()
+        (days, hours, minutes) = seconds_to_dhm(interval.total_seconds())
+        return (days, hours, minutes)
 
     def upcoming(self) -> bool:
-        '''upcoming()    ---------> bool'''
-        pass
+        """Python Docstring"""
+        now = datetime.now()
+        return now < self._end_datetime()
     
     def inprogress(self) -> bool:
-        '''inprogress()  ---------> bool'''
-        pass
-
+        """Python Docstring"""
+        now = datetime.now()
+        return now >= self._start_datetime() and now <= self._end_datetime()
+    
     def finished(self) -> bool:
-        '''finished()    ---------> bool'''
-        pass    
-
-    def is_before(self, other) -> bool:
-        '''is_before(other) ------> bool'''
-        pass
-
-    def is_after(self, other) -> bool:
-        '''is_after(other)  ------> bool'''
-        pass
-
-    def overloaps(self, other) -> bool:
-        '''overloaps(other) ------> bool'''
-        pass
+        """Python Docstring"""
+        now = datetime.now()
+        return now > self._end_datetime()
+  
+    def is_before(self, other: 'Event') -> bool:
+        """Python Docstring"""
+        return self._start_datetime() < other._start_datetime()
     
-    def sample(self, cls) -> 'Event':
-        '''sample(cls)      ------> Event (@classmethod -> factory)'''
-        pass
+    def is_after(self, other: 'Event') -> bool:
+        """Python Docstring"""
+        return self._start_datetime() > other._start_datetime()
+
+    def overloaps(self, other: 'Event') -> bool:
+        """Python Docstring"""
+        return (self._start_datetime() >= other._start_datetime() and self._start_datetime() <= other._end_datetime()) \
+               or (self._end_datetime() >= other.start_time() and self._end_datetime() <= other._end_datetime())
+
+
+    def _start_datetime(self) -> datetime:
+        """Python Docstring"""
+        return datetime.combine(date = self.date, time = self.start_time)
     
-    # # MÉTODOS/OPERACIONES A NIVEL DE CLASE 
-    # @classmethod
-    # def random(cls) -> 'Location':
-    #     """Python DocString"""
-    #     return cls(name = "Random Localization", latitude = random.uniform(cls.MIN_LATITUDE, cls.MAX_LATITUDE), longitude = random.uniform(cls.MIN_LONGITUDE, cls.MAX_LONGITUDE))
-
-    #datetime.combine
-
+    def _end_datetime(self) -> datetime:
+        """Python Docstring"""
+        return datetime.combine(date = self.date, time = self.end_time)
 
     def __str__(self) -> str:
-        """__str__()"""
-        return f"{self.id} > {self.name()}: {self.date} {self.start_time}-{self.end_time}. {self.description}"
+        """Python Docstring"""
+        return f"{self.id} > {self.name}"
 
-    def __repr__(self):
-        """__repr__() -> Mostra Event (nom, data i data inici)"""
-        return f"{self.name},{self.date} {self.start_time}-{self.end_time}. {self.description}"
+    def __repr__(self) -> str:
+        """Python Docstring"""
+        return f"{self.id} > {self.name}"
 
     def __len__(self) -> int:
-        """__len__() -------------> minutes"""
-        return self.end_time - self.start_time
+        """Python Docstring"""
+        interval = self._end_datetime() - self._start_datetime()
+        return int(interval.total_seconds()/60)
 
-    def __sub__(self,other: 'Event') -> tuple[int, int, int]:
-        # """sub__(other) -------------> (days, hous, minutes) between two events"""
-        if not isinstance(other, Event):
-            raise TypeError("You can only sub with another Event")
-
-        #start_time = self.start_time.strftime("%H:%M")
-        #end_time = self.end_time.strftime("%H:%M")
-        return [0,0,0]
-    
+    def __sub__(self, other: 'Event') -> tuple[int,int,int]:
+        """Python Docstring"""
+        diff = other._start_datetime() - self._start_datetime()
+        (days,hours,minutes) = seconds_to_dhm(diff.total_seconds())
+        return (days,hours,minutes)
 
     def __lt__(self, other: 'Event') -> bool:
-        """__lt__(other)"""
-        if not isinstance(other, Event):
-            raise TypeError("You can only compare with another Event")
-        return 
+        """Python Docstring"""
+        return self.is_before(other)
 
     def __le__(self, other: 'Event') -> bool:
-        """__le__(other)"""
-        if not isinstance(other, Event):
-            raise TypeError("You can only compare with another Event")
-
-        return 
+        """Python Docstring"""
+        return self.is_before(other) or self._start_datetime() == other._start_datetime()
 
     def __gt__(self, other: 'Event') -> bool:
-        """__gt__(other)"""
-        if not isinstance(other, Event):
-            raise TypeError("You can only compare with another Event")
-
-        return 
+        """Python Docstring"""
+        return self.is_after(other)
 
     def __ge__(self, other: 'Event') -> bool:
-        """__ge__(other)"""
-        if not isinstance(other, Event):
-            raise TypeError("You can only compare with another Event")
-
-        return 
+        """Python Docstring"""
+        return self.is_after(other) or self._start_datetime() == other._start_datetime()

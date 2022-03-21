@@ -1,7 +1,7 @@
 '''
 Main Module
 '''
-from datetime import date,datetime,timedelta
+from datetime import date, time
 
 from pylib.utils import strutils          #pylib.utils.strutils
 from pylib.utils import mathutils         #pylib.utils.mathutils
@@ -15,6 +15,7 @@ from pylib.entities.geography import Location
 from pylib.entities.staff import Employee, SalesEmployee
 from pylib.entities.geometry import Color, AlphaColor, Shape, Square, Triangle, Rectangle
 from pylib.entities.planning import Event
+
 
 
 def main():
@@ -227,17 +228,19 @@ def main():
         [days, hours, minuts] = planning.seconds_to_dhm(secs)
         print(f"{secs} segons -> Days: {days} hours: {hours} minuts: {minuts}")
     
-    print(datetime.now() - timedelta(hours=1))
-
-    event1 = Event(name = "Event1", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event1 Description")
-    event2 = Event(name = "Event2", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event2 Description")
-    event3 = Event(name = "Event3", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event3 Description")
-    event4 = Event(name = "Event4", date = date(year=2022, month=3, day=21), start_time = datetime.time(hour=18, minute =0), end_time = datetime.time(hour=22, minut =0), description = "Event4 Description")
-    #event5 = Event(name = "Event5", date = datetime.now(), description = "Event5 Now Description")
-    events =(event1,event2,event3,event4)
-
-    for event in events:
-        print(f"{event.name}: Duration: {event.duration()}")
+    ev1 = Event(name = "Evento 1", date = date(year = 2022, month = 3, day = 14), start_time = time(hour = 13, minute = 30), end_time = time(hour = 15, minute = 0))
+    ev2 = Event(name = "Evento 2", date = date(year = 2022, month = 3, day = 15), start_time = time(hour = 13, minute = 30), end_time = time(hour = 15, minute = 0))
+    ev3 = Event(name = "Evento 3", date = date(year = 2022, month = 3, day = 16), start_time = time(hour = 13, minute = 30), end_time = time(hour = 15, minute = 0))
+    ev4 = Event(name = "Evento 4", date = date(year = 2022, month = 3, day = 17), start_time = time(hour = 13, minute = 30), end_time = time(hour = 15, minute = 0))
+    ev5 = Event(name = "Evento 5", date = date(year = 2022, month = 3, day = 18), start_time = time(hour = 13, minute = 30), end_time = time(hour = 15, minute = 0))
+    events = [ev1, ev2, ev3, ev4, ev5]
+    for (idx, event) in enumerate(events, start = 1):
+        print("-" * 150)
+        print(idx)
+        print(f"Duración: {event.duration()}")
+        print(f"Duración: {len(event)} minutes")
+        print(f"Time left: {event.time_left()}")
+        print("-" * 150)
 
 if __name__ == "__main__":
     main()
